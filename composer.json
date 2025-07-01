@@ -1,5 +1,6 @@
 {
     "name": "red-plug/eloquent-unhydrated",
+    "description": "Create fastest queries without leaving the eloquent models",
     "license": "MIT",
     "keywords": [
         "laravel",
