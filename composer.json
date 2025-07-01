@@ -1,0 +1,55 @@
+{
+    "name": "red-plug/eloquent-unhydrated",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "eloquent",
+        "macros",
+        "eloquent-unhydrated"
+    ],
+    "homepage": "https://github.com/red-plug/packages-eloquent-unhydrated",
+    "autoload": {
+        "psr-4": {
+            "RedPlug\\EloquentUnhydrated\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "andreslqr",
+            "email": "me@andreslopez.com.mx",
+            "homepage": "https://github.com/andreslqr",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/database": "^12.0"   
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6.2",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.7",
+        "phpunit/phpunit": "^11.5.3"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RedPlug\\EloquentUnhydrated\\Test\\": "tests"
+        }
+    },
+     "scripts": {
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "test": "vendor/bin/pest"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RedPlug\\EloquentUnhydrated\\EloquentUnhydratedServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
