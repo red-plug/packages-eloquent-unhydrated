@@ -2,20 +2,22 @@
 
 namespace RedPlug\EloquentUnhydrated\Macros;
 
+use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\Cursor;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
-use Illuminate\Database\Query\Expression;
 
 /**
- * Returns a collection of unhydrated models
- * 
+ * Returns a collection of unhydrated models.
+ *
  * @param  int  $perPage
  * @param  array|string  $columns
  * @param  string  $cursorName
  * @param  \Illuminate\Pagination\Cursor|string|null  $cursor
  *
  * @mixin  \Illuminate\Database\Eloquent\Builder
+ *
  * @return \Illuminate\Contracts\Pagination\CursorPaginator
  */
 class PaginateUsingCursorUnhydrated
@@ -30,7 +32,7 @@ class PaginateUsingCursorUnhydrated
          * @param  string  $cursorName
          * @param  \Illuminate\Pagination\Cursor|string|null  $cursor
          * @return \Illuminate\Contracts\Pagination\CursorPaginator
-         * 
+         *
          * @throws \Throwable
          */
         return function ($perPage, $columns = ['*'], $cursorName = 'cursor', $cursor = null) {
@@ -41,6 +43,7 @@ class PaginateUsingCursorUnhydrated
                     : CursorPaginator::resolveCurrentCursor($cursorName, $cursor);
             }
 
+            /** @phpstan-ignore-next-line */
             $orders = $this->ensureOrderForCursorPagination(! is_null($cursor) && $cursor->pointsToPreviousItems());
 
             if (! is_null($cursor)) {
@@ -51,6 +54,7 @@ class PaginateUsingCursorUnhydrated
                     $unionBuilders = $builder->getUnionBuilders();
 
                     if (! is_null($previousColumn)) {
+                        /** @phpstan-ignore-next-line */
                         $originalColumn ??= $this->getOriginalColumnNameForCursorPagination($this, $previousColumn);
 
                         $builder->where(
@@ -61,6 +65,7 @@ class PaginateUsingCursorUnhydrated
 
                         $unionBuilders->each(function ($unionBuilder) use ($previousColumn, $cursor) {
                             $unionBuilder->where(
+                                /** @phpstan-ignore-next-line */
                                 $this->getOriginalColumnNameForCursorPagination($unionBuilder, $previousColumn),
                                 '=',
                                 $cursor->parameter($previousColumn)
@@ -73,6 +78,7 @@ class PaginateUsingCursorUnhydrated
                     $builder->where(function ($secondBuilder) use ($addCursorConditions, $cursor, $orders, $i, $unionBuilders) {
                         ['column' => $column, 'direction' => $direction] = $orders[$i];
 
+                        /** @phpstan-ignore-next-line */
                         $originalColumn = $this->getOriginalColumnNameForCursorPagination($this, $column);
 
                         $secondBuilder->where(
@@ -90,6 +96,7 @@ class PaginateUsingCursorUnhydrated
                         $unionBuilders->each(function ($unionBuilder) use ($column, $direction, $cursor, $i, $orders, $addCursorConditions) {
                             $unionWheres = $unionBuilder->getRawBindings()['where'];
 
+                            /** @phpstan-ignore-next-line */
                             $originalColumn = $this->getOriginalColumnNameForCursorPagination($unionBuilder, $column);
                             $unionBuilder->where(function ($unionBuilder) use ($column, $direction, $cursor, $i, $orders, $addCursorConditions, $originalColumn, $unionWheres) {
                                 $unionBuilder->where(
@@ -116,6 +123,7 @@ class PaginateUsingCursorUnhydrated
 
             $this->limit($perPage + 1);
 
+            /** @phpstan-ignore-next-line */
             return $this->cursorPaginator($this->getUnhydrated($columns), $perPage, $cursor, [
                 'path' => Paginator::resolveCurrentPath(),
                 'cursorName' => $cursorName,
